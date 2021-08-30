@@ -1,14 +1,32 @@
 const fs = require('fs');
+const path = require('path');
 // generate unique id
-const { v4: uuidv4 } = require('uuid');
+// const uniqid = require('uniqid');
 
-const util = require('util');
-const readFileSync = util.promisify(fs.readFile);
-const writeFileSync = util.promisify(fs.writeFile);
-// read - readfilesync
-// write - writefilesync
-// get
-// add
-// remove
+function createNote(body, noteArray) {
+    // body.id = uniqid();
+    noteArray.push(body);
 
-module.exports
+    fs.writeFileSync(
+        path.join(__dirname, '../db/db.json'),
+        JSON.stringify(noteArray, null, 2)
+    );
+
+    return body;
+}
+
+function validateNote(notes) {
+    if (!notes.title || typeof notes.title !== 'string') {
+        return false;
+    }
+    if (!notes.text || typeof notes.text !== 'string') {
+        return false;
+    }
+    return true;
+}
+
+function readNote() {
+    fs.readFileSync('db/db.json', 'utf8')
+}
+
+module.exports = { createNote, validateNote, readNote };
